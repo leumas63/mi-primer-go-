@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	archivos, err := ioutil.ReadDir("C:\\Users\\pc\\Desktop\\8\\Computacion en la nube\\mi-primer-go\\imagenes")
+	archivos, err := ioutil.ReadDir("D:\\Users\\Cristian\\Documents\\2023-1\\Computacion Nube\\Pruebas")
 	if err != nil {
 		log.Fatal(err)
 	}
