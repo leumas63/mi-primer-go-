@@ -27,16 +27,21 @@ func handler(w http.ResponseWriter, r *http.Request) {
             <head>
                 <meta charset="UTF-8">
                 <title>{{ .Title }}</title>
+				<style>
+		body {
+			font-family: Calibri, sans-serif;
+		}
+		</style>
             </head>
             <body>
 			<center>
                 <h1>{{ .Heading }}</h1>
 				<br>
                 <img src="data:image/jpg;base64,{{ .ImageX }}" />
-				<p>{{ .NameImageX }}</p>
+				<h4>{{ .NameImageX }}</h4>
 				<hr>
 				<img src="data:image/jpg;base64,{{ .ImageZ }}" />
-				<p>{{ .NameImageZ }}</p>
+				<h4>{{ .NameImageZ }}</h4>
 				<br>
 				<footer>
 				<p>{{ .Subject }}</p>
@@ -47,6 +52,18 @@ func handler(w http.ResponseWriter, r *http.Request) {
             </body>
         </html>
     `
+
+	var imageX string
+	var imageY string
+	var nameX string
+	var nameY string
+	for {
+		imageX, nameX = codificar64()
+		imageY, nameY = codificar64()
+		if nameX != nameY && imageX != imageY {
+			break
+		}
+	}
 
 	// Compilar la plantilla
 	tmpl, err := template.New("html").Parse(html)
@@ -69,10 +86,10 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	}{
 		Title:      "Web",
 		Heading:    obtenerHost(),
-		ImageX:     codificar64(),
-		NameImageX: "",
-		ImageZ:     codificar64(),
-		NameImageZ: "",
+		ImageX:     imageX,
+		NameImageX: nameX,
+		ImageZ:     imageY,
+		NameImageZ: nameY,
 		Subject:    "Computacion en la nube",
 		Names:      "Samuel Bermudez, Cristian Barerra",
 		Date:       fecha(),
@@ -91,8 +108,7 @@ func fecha() string {
 	return ahora
 }
 
-func listaImagenes() []string {
-	direccion := "D:\\Users\\Cristian\\Documents\\2023-1\\Computacion Nube\\Pruebas"
+func listaImagenes(direccion string) []string {
 
 	var nombres []string
 	var i int
@@ -120,12 +136,12 @@ func aleatorioImagen(n int, arreglo []string) string {
 	return posicion
 }
 
-func codificar64() string {
+func codificar64() (string, string) {
 	direccion := "D:\\Users\\Cristian\\Documents\\2023-1\\Computacion Nube\\Pruebas"
 
 	var arreglo []string
 
-	arreglo = listaImagenes()
+	arreglo = listaImagenes(direccion)
 	tamano := len(arreglo)
 	archivoAleatorio := aleatorioImagen(tamano, arreglo)
 	imagen := direccion + "\\" + archivoAleatorio
@@ -136,7 +152,7 @@ func codificar64() string {
 	}
 
 	img64 := base64.StdEncoding.EncodeToString(byte)
-	return img64
+	return img64, archivoAleatorio
 }
 
 func obtenerNombre(nombre string) string {
@@ -150,3 +166,10 @@ func obtenerHost() string {
 	}
 	return hostname
 }
+
+//https://www.digitalocean.com/community/tutorials/how-to-use-variables-and-constants-in-go-es
+//https://steemit.com/cervantes/@orlmicron/array-y-slice-en-go-golang
+//https://blastcoding.com/bucles-en-go-golang/
+//https://www.tutorialesprogramacionya.com/goya/detalleconcepto.php?punto=21&codigo=21&inicio=15
+//https://parzibyte.me/blog/2021/08/12/go-servir-carpeta-http/
+//https://www.delftstack.com/es/howto/html/html-img-base64/
