@@ -8,7 +8,7 @@ import (
 func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "<html><head><title>[]</title></head><body><h1>[]</h1></body></html>")
+		fmt.Fprintf(w, "<html><head><title>[]</title></head><body><center><h1>[]</h1></center></body></html>")
 	})
 
 	// Inicia el servidor en el puerto 8090
